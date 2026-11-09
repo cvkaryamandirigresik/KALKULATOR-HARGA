@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Harga Kardus Marketing - CV. Karya Mandiri Gresik</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f6f9; padding: 15px; color: #333; }
+        .card { background: white; max-width: 420px; margin: auto; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        
+        .logo-box { text-align: center; border-bottom: 2px solid #2563eb; padding-bottom: 12px; margin-bottom: 15px; }
+        .logo-title { font-size: 16px; font-weight: bold; color: #1e3a8a; letter-spacing: 0.5px; }
+        .logo-subtitle { font-size: 11px; color: #64748b; text-transform: uppercase; margin-top: 3px; font-weight: bold; }
+
+        h2 { font-size: 15px; margin-bottom: 15px; color: #334155; text-align: center; text-transform: uppercase; }
+        label { font-size: 13px; font-weight: bold; display: block; margin-top: 12px; color: #444; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        button { width: 100%; background: #2563eb; color: white; border: none; padding: 12px; margin-top: 20px; border-radius: 6px; font-weight: bold; font-size: 15px; cursor: pointer; }
+        button:hover { background: #1d4ed8; }
+        
+        .result { background: #eff6ff; border: 1px solid #bfdbfe; padding: 15px; margin-top: 20px; border-radius: 8px; text-align: center; }
+        
+        .penawaran-title { font-size: 14px; color: #1e3a8a; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid #bfdbfe; padding-bottom: 6px; letter-spacing: 0.5px; }
+
+        .result .label-ket { font-size: 13px; color: #1e40af; font-weight: bold; margin-bottom: 5px; white-space: pre-line; }
+        .result .nilai-harga { font-size: 20px; color: #1d4ed8; font-weight: bold; margin-top: 2px; }
+        
+        .total-box { background: #dbeafe; border: 1px solid #93c5fd; padding: 12px; border-radius: 6px; margin-top: 12px; }
+        .total-label { font-size: 12px; color: #1e3a8a; font-weight: bold; text-transform: uppercase; margin-bottom: 4px; }
+        .total-rincian { font-size: 13px; color: #334155; margin-bottom: 2px; }
+        .diskon-info { font-size: 12px; color: #16a34a; font-weight: bold; margin-bottom: 4px; }
+        .total-nilai { font-size: 24px; color: #1e40af; font-weight: bold; }
+
+        .catatan-info { font-size: 11px; color: #475569; margin-top: 12px; border-top: 1px dashed #cbd5e1; padding-top: 8px; text-align: left; line-height: 1.4; }
+        .closing-text { font-size: 11px; color: #1e293b; margin-top: 8px; font-weight: bold; text-align: center; background: #e0f2fe; padding: 6px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <!-- Header Logo Perusahaan -->
+        <div class="logo-box">
+            <div class="logo-title">CV. KARYA MANDIRI GRESIK</div>
+            <div class="logo-subtitle">Pusat Produksi & Custom Packaging</div>
+        </div>
+
+        <h2>Kalkulator Harga Marketing</h2>
+        
+        <label>Pilih Jenis Bahan</label>
+        <select id="jenis_flute">
+            <option value="0.0053">B-Flute (K125/M125/K125)</option>
+            <option value="0.0056">E-Flute (K125/M125/K125)</option>
+        </select>
+
+        <label>Panjang Kardus Jadi (mm)</label>
+        <input type="number" id="p_kardus" placeholder="Contoh: 200">
+        
+        <label>Lebar Kardus Jadi (mm)</label>
+        <input type="number" id="l_kardus" placeholder="Contoh: 100">
+        
+        <label>Tinggi Kardus Jadi (mm)</label>
+        <input type="number" id="t_kardus" placeholder="Contoh: 80">
+        
+        <label>Panjang Bahan Kardus (mm)</label>
+        <input type="number" id="p_bahan" placeholder="Contoh: 50">
+
+        <label>Lebar Bahan Kardus (mm)</label>
+        <input type="number" id="l_bahan" placeholder="Contoh: 71.5">
+
+        <label>Barang Jadi Kardus per Lembar (Pcs)</label>
+        <input type="number" id="pcs_per_lbr" placeholder="Contoh: 2">
+
+        <label>Jumlah Pesanan (Qty Pcs)</label>
+        <input type="number" id="qty_pesan" placeholder="Contoh: 500">
+
+        <button onclick="hitungHargaMarketing()">CEK HARGA JUAL</button>
+
+        <div class="result" id="hasil" style="display: none;">
+            <div class="penawaran-title">📋 BERIKUT PENAWARANNYA</div>
+            
+            <div class="label-ket" id="teksKet">-</div>
+            <div style="font-size: 11px; color: #555; text-transform: uppercase; margin-top: 4px;">Harga Jual per Pcs</div>
+            <div class="nilai-harga" id="teksHarga">Rp 0</div>
+            
+            <!-- Kotak Rincian Total Pesanan & Diskon Otomatis -->
+            <div class="total-box">
+                <div class="total-label">Total Harga Pesanan</div>
+                <div class="total-rincian" id="teksRincian">500 pcs × Rp 0</div>
+                <div class="diskon-info" id="teksDiskon" style="display: none;">Diskon Grosir 5% diterapkan!</div>
+                <div class="total-nilai" id="teksTotal">Rp 0</div>
+            </div>
+
+            <div class="catatan-info">
+                • Harga polos (belum termasuk sablon / printing & PPN).<br>
+                • <b>Diskon 5%</b> otomatis untuk total pembelian > Rp 10 Juta.<br>
+                • <b>Pembayaran Awal (DP):</b> Minimal 50%.<br>
+                • Harga belum termasuk ongkos kirim (<b>Gratis Ongkir</b> Jatim min. Invoice Rp 3 Juta | Pengiriman menyesuaikan & menunggu rute).<br>
+                • Melayani custom ukuran lain, model lipatan, Die Cut, dll.
+            </div>
+
+            <div class="closing-text">
+                Terima kasih atas kepercayaan Anda.<br>Ditunggu orderannya! — CV. Karya Mandiri Gresik
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function hitungHargaMarketing() {
+            let pKardus = parseFloat(document.getElementById('p_kardus').value) || 0;
+            let lKardus = parseFloat(document.getElementById('l_kardus').value) || 0;
+            let tKardus = parseFloat(document.getElementById('t_kardus').value) || 0;
+            let pBahan = parseFloat(document.getElementById('p_bahan').value) || 0;
+            let lBahan = parseFloat(document.getElementById('l_bahan').value) || 0;
+            let pcsPerLbr = parseFloat(document.getElementById('pcs_per_lbr').value) || 0;
+            let qtyPesan = parseFloat(document.getElementById('qty_pesan').value) || 0;
+            
+            let selectFlute = document.getElementById('jenis_flute');
+            let faktorPengali = parseFloat(selectFlute.value);
+            let namaFlute = selectFlute.options[selectFlute.selectedIndex].text.split(' ')[0]; 
+
+            if(pKardus === 0 || lKardus === 0 || tKardus === 0 || pBahan === 0 || lBahan === 0 || pcsPerLbr === 0 || qtyPesan === 0) {
+                alert("Mohon isi semua kolom data termasuk jumlah pesanan (Qty) dengan benar!");
+                return;
+            }
+
+            // 1. Hitung HPP Bahan Dasar
+            let hppBahanDasar = (pBahan * lBahan * faktorPengali) / pcsPerLbr;
+
+            // 2. Ditambah Biaya Tenaga Kerja Rp 120 terlebih dahulu
+            let subtotal1 = hppBahanDasar + 120;
+
+            // 3. Tentukan Margin Berjenjang: Jika subtotal1 (HPP + 120) > 1000 pakai 25%, jika <= 1000 pakai 30%
+            let persentaseMargin = subtotal1 > 1000 ? 0.25 : 0.30;
+            let nilaiMargin = subtotal1 * persentaseMargin;
+            let subtotal2 = subtotal1 + nilaiMargin;
+            
+            // 4. Ditambah Biaya Operasional 15% di tahap akhir
+            let biayaOperasional = subtotal2 * 0.15; 
+            let hargaFinalPcs = Math.round(subtotal2 + biayaOperasional);
+
+            // Hitung subtotal awal sebelum diskon
+            let totalAwal = hargaFinalPcs * qtyPesan;
+            let totalAkhir = totalAwal;
+
+            // Logika diskon otomatis jika total di atas Rp 10.000.000
+            let infoDiskonEl = document.getElementById('teksDiskon');
+            if (totalAwal > 10000000) {
+                let nilaiDiskon = totalAwal * 0.05;
+                totalAkhir = totalAwal - nilaiDiskon;
+                infoDiskonEl.style.display = 'block';
+                infoDiskonEl.innerText = `🎉 Diskon 5% diterapkan (-Rp ${Math.round(nilaiDiskon).toLocaleString('id-ID')})`;
+            } else {
+                infoDiskonEl.style.display = 'none';
+            }
+
+            document.getElementById('teksKet').innerText = `${pKardus}x${lKardus}x${tKardus} mm\nBahan ${namaFlute} (K125/M125/K125)`;
+            document.getElementById('teksHarga').innerText = "Rp " + hargaFinalPcs.toLocaleString('id-ID');
+            
+            // Menampilkan rincian perkalian Qty x Harga Satuan serta total akhir setelah diskon
+            document.getElementById('teksRincian').innerText = `${qtyPesan.toLocaleString('id-ID')} pcs × Rp ${hargaFinalPcs.toLocaleString('id-ID')}`;
+            document.getElementById('teksTotal').innerText = "Rp " + Math.round(totalAkhir).toLocaleString('id-ID');
+            
+            document.getElementById('hasil').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
